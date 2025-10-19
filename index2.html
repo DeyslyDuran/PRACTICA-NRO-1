@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galería Pokémon</title>
+    <link rel="stylesheet" href="estilos2.css">
+</head>
+<body>
+    <h1>Galería Pokémon</h1>
+
+    <input type="text" id="DurFiltro" placeholder="Filtrar por nombre...">
+    <div class="pagination">
+        <button id="DurAnterior">Anterior</button>
+        <button id="DurSiguiente">Siguiente</button>
+    </div>
+
+    <div id="DurGrid"></div>
+
+    <script>
+        const DurAPIListado = 'https://pokeapi.co/api/v2/pokemon?limit=20&offset=';
+        const DurAPIDetalle = 'https://pokeapi.co/api/v2/pokemon/';
+        const DurGrid = document.getElementById('DurGrid');
+        const DurFiltro = document.getElementById('DurFiltro');
+        const DurAnterior = document.getElementById('DurAnterior');
+        const DurSiguiente = document.getElementById('DurSiguiente');
+
+        let DurPagina = 0;
+        let DurPokemons = [];
+
+        async function DurCargarPagina() {
+            try {
+                const res = await fetch(DurAPIListado + (DurPagina * 20));
+                const datos = await res.json();
+                DurPokemons = datos.results;
+                DurRenderizar();
+            } catch {
+                DurGrid.textContent = "Error al cargar Pokémon";
+            }
+        }
+
+        async function DurObtenerSprite(url) {
+            try {
+                const res = await fetch(url);
+                const datos = await res.json();
+                return datos.sprites.front_default || '';
+            } catch {
+                return '';
+            }
+        }
+
+        async function DurRenderizar() {
+            DurGrid.innerHTML = '';
+            const DurTextoFiltro = DurFiltro.value.toLowerCase();
+
+            for (const DurPoke of DurPokemons) {
+                if (!DurPoke.name.toLowerCase().includes(DurTextoFiltro)) continue;
+
+                const DurTarjeta = document.createElement('div');
+                DurTarjeta.className = 'card';
+
+                const DurNombre = document.createElement('div');
+                DurNombre.textContent = DurPoke.name;
+
+                const DurImg = document.createElement('img');
+                DurImg.src = await DurObtenerSprite(DurPoke.url);
+                DurImg.alt = DurPoke.name;
+
+                DurTarjeta.appendChild(DurNombre);
+                DurTarjeta.appendChild(DurImg);
+                DurGrid.appendChild(DurTarjeta);
+            }
+        }
+
+        DurFiltro.addEventListener('input', DurRenderizar);
+
+        DurAnterior.addEventListener('click', () => {
+            if(DurPagina > 0) DurPagina--;
+            DurCargarPagina();
+        });
+
+        DurSiguiente.addEventListener('click', () => {
+            DurPagina++;
+            DurCargarPagina();
+        });
+
+        DurCargarPagina();
+    </script>
+</body>
+</html>

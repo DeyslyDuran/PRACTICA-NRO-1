@@ -1,0 +1,48 @@
+body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+}
+
+#DurFiltro {
+    display: block;
+    margin: 10px auto;
+    padding: 5px;
+    width: 200px;
+}
+
+.pagination {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.pagination button {
+    margin: 0 5px;
+    padding: 5px 10px;
+}
+
+#DurGrid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+}
+
+.card {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    width: 120px;
+    text-align: center;
+}
+
+.card img {
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto;
+}
